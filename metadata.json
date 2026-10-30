@@ -1,0 +1,6 @@
+{
+  "name": "Smart Classroom – Spin & Learn",
+  "description": "Student management and random question selection platform with an animated spinning wheel for classroom engagement.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,164 @@
+{
+  "entities": {
+    "Admin": {
+      "title": "Admin",
+      "description": "Administrator account credentials and role metadata",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "username": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin"] },
+        "passwordHash": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["username", "name", "role", "passwordHash"]
+    },
+    "Teacher": {
+      "title": "Teacher",
+      "description": "Teacher profile, credentials, and class/section assignments",
+      "type": "object",
+      "properties": {
+        "username": { "type": "string" },
+        "name": { "type": "string" },
+        "passwordHash": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "assignedClasses": { "type": "array" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "mustChangePassword": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "lastLogin": { "type": "string" }
+      },
+      "required": ["username", "name", "passwordHash", "status", "assignedClasses"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Student record belonging to a specific class and section",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "name": { "type": "string" },
+        "rollNo": { "type": "string" },
+        "classId": { "type": "string" },
+        "section": { "type": "string" },
+        "classSectionKey": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "gender": { "type": "string" },
+        "attendanceStatus": { "type": "string", "enum": ["present", "absent"] },
+        "totalSelections": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["studentId", "name", "rollNo", "classId", "classSectionKey"]
+    },
+    "Class": {
+      "title": "Class",
+      "description": "Class configuration with section metadata",
+      "type": "object",
+      "properties": {
+        "classNumber": { "type": "number" },
+        "name": { "type": "string" },
+        "hasSections": { "type": "boolean" },
+        "sections": { "type": "array" }
+      },
+      "required": ["classNumber", "name", "hasSections", "sections"]
+    },
+    "Question": {
+      "title": "Question",
+      "description": "Subject question item for classroom oral testing",
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "subject": { "type": "string", "enum": ["English", "Mathematics", "Science", "General Knowledge", "History", "Geography", "Arabic", "Urdu", "Other"] },
+        "classId": { "type": "string" },
+        "difficulty": { "type": "string", "enum": ["Easy", "Medium", "Hard"] },
+        "answer": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["text", "subject", "classId", "difficulty"]
+    },
+    "SelectionHistory": {
+      "title": "SelectionHistory",
+      "description": "Log entry of student wheel selection and oral question result",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "rollNo": { "type": "string" },
+        "classId": { "type": "string" },
+        "section": { "type": "string" },
+        "classSectionKey": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "questionId": { "type": "string" },
+        "questionText": { "type": "string" },
+        "subject": { "type": "string" },
+        "answerStatus": { "type": "string", "enum": ["correct", "incorrect", "skipped", "none"] },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["studentId", "studentName", "classId", "classSectionKey", "teacherId", "teacherName", "answerStatus"]
+    },
+    "SpinningRound": {
+      "title": "SpinningRound",
+      "description": "State tracking for active wheel round and fair non-repeat student exclusions",
+      "type": "object",
+      "properties": {
+        "classSectionKey": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "completedStudentIds": { "type": "array" },
+        "roundNumber": { "type": "number" },
+        "status": { "type": "string", "enum": ["in_progress", "completed"] },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["classSectionKey", "teacherId", "completedStudentIds", "roundNumber", "status"]
+    },
+    "SystemSetting": {
+      "title": "SystemSetting",
+      "description": "Global classroom platform configuration and preferences",
+      "type": "object",
+      "properties": {
+        "schoolName": { "type": "string" },
+        "academicYear": { "type": "string" },
+        "soundEnabled": { "type": "boolean" },
+        "confettiEnabled": { "type": "boolean" },
+        "timerSeconds": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["schoolName", "academicYear"]
+    }
+  },
+  "firestore": {
+    "/admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Administrator account credentials and role records"
+    },
+    "/teachers/{teacherId}": {
+      "schema": "Teacher",
+      "description": "Teacher credentials, status, and class assignments"
+    },
+    "/students/{studentId}": {
+      "schema": "Student",
+      "description": "Student roster across 10 classes and sections"
+    },
+    "/classes/{classId}": {
+      "schema": "Class",
+      "description": "The 10 standard classroom definitions"
+    },
+    "/questions/{questionId}": {
+      "schema": "Question",
+      "description": "Question bank items by subject and class"
+    },
+    "/selectionHistory/{historyId}": {
+      "schema": "SelectionHistory",
+      "description": "Historical log of wheel selections and student answer results"
+    },
+    "/spinningRounds/{roundId}": {
+      "schema": "SpinningRound",
+      "description": "Live and persistent state for non-repeat wheel selection rounds"
+    },
+    "/classroomSettings/{settingId}": {
+      "schema": "SystemSetting",
+      "description": "Global platform settings"
+    }
+  }
+}

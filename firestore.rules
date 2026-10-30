@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny for unmanaged collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Health check endpoint
+    match /test/connection {
+      allow read, write: if true;
+    }
+
+    // Application collections with server-safe document schema
+    match /admins/{adminId} {
+      allow read, write: if true;
+    }
+
+    match /teachers/{teacherId} {
+      allow read, write: if true;
+    }
+
+    match /students/{studentId} {
+      allow read, write: if true;
+    }
+
+    match /classes/{classId} {
+      allow read, write: if true;
+    }
+
+    match /questions/{questionId} {
+      allow read, write: if true;
+    }
+
+    match /selectionHistory/{historyId} {
+      allow read, write: if true;
+    }
+
+    match /spinningRounds/{roundId} {
+      allow read, write: if true;
+    }
+
+    match /classroomSettings/{settingId} {
+      allow read, write: if true;
+    }
+  }
+}
